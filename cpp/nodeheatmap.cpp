@@ -198,7 +198,8 @@ void CompileVScroll(const Nan::FunctionCallbackInfo <v8::Value> &info) {
     // v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d)); // ssasi
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
     myNewSP->height = (unsigned int) myObj->GetInternalField(1)->NumberValue(Nan::GetCurrentContext()).FromJust();
-    v8::Local <v8::Array> sparseArr; // v8::Local<v8::Array>::Cast(myObj->GetInternalField(2));  // ssasi
+    v8::Local<v8::Array> sparseArr = v8::Local<v8::Array>::Cast(myObj->GetInternalField(2).As<v8::Array>());
+
     
     myNewSP->datalen = sparseArr->Length();
     myNewSP->data = new unsigned int[sparseArr->Length()];
