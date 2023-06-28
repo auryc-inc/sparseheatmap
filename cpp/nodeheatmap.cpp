@@ -88,7 +88,10 @@ void CompileCanvas(const Nan::FunctionCallbackInfo <v8::Value> &info) {
   for (unsigned int d = 0; d < dataarr->Length(); d++) {
     Sparsearray *myNewSP = new Sparsearray();
     
-    v8::Local <v8::Object> myObj; // v8::Object::Cast(dataarr->Get(Nan::GetCurrentContext(), d).ToLocalChecked()); //ssasi
+    v8::Local<v8::Object> myObj = Nan::To<v8::Object>(dataarr).ToLocalChecked();
+    // v8::Local<v8::Value> value = myObj->Get(Nan::GetCurrentContext(), Nan::New("propertyName").ToLocalChecked()).ToLocalChecked();
+
+    // v8::Local <v8::Object> myObj = v8::Object::Cast(dataarr->Get(Nan::GetCurrentContext(), d).ToLocalChecked()); //ssasi
     //v8::Local <v8::Object> myObj = v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d));
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
     myNewSP->height = (unsigned int) myObj->GetInternalField(1)->NumberValue(Nan::GetCurrentContext()).FromJust();
@@ -191,10 +194,12 @@ void CompileVScroll(const Nan::FunctionCallbackInfo <v8::Value> &info) {
 
   for (unsigned int d = 0; d < dataarr->Length(); d++) {
     Sparsearray *myNewSP = new Sparsearray();
-    v8::Local <v8::Object> myObj; // v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d)); // ssasi
+    v8::Local <v8::Object> myObj = Nan::To<v8::Object>(dataarr).ToLocalChecked();
+    // v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d)); // ssasi
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
     myNewSP->height = (unsigned int) myObj->GetInternalField(1)->NumberValue(Nan::GetCurrentContext()).FromJust();
-    v8::Local <v8::Array> sparseArr; // v8::Local<v8::Array>::Cast(myObj->GetInternalField(2)); 
+    v8::Local <v8::Array> sparseArr; // v8::Local<v8::Array>::Cast(myObj->GetInternalField(2));  // ssasi
+    
     myNewSP->datalen = sparseArr->Length();
     myNewSP->data = new unsigned int[sparseArr->Length()];
     for (unsigned int t = 0; t < sparseArr->Length(); t++) {
