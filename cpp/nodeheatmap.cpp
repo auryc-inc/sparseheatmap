@@ -82,17 +82,19 @@ void CompileCanvas(const Nan::FunctionCallbackInfo <v8::Value> &info) {
 
   Sparsearray **sparrs = new Sparsearray *[dataarr->Length()];
 
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::HandleScope handleScope(isolate);
+  v8::Local<v8::Context> context = isolate->GetCurrentContext();
   // Do the matrix!
   Sparsematrix matrix(width, height, blobwidth, blobheight, layout, blobVals, debugMode, filter, trimPixelsLeft, trimPixelsTop, trimPixelsRight, trimPixelsBottom);
 
   for (unsigned int d = 0; d < dataarr->Length(); d++) {
     Sparsearray *myNewSP = new Sparsearray();
-    
-    v8::Local<v8::Object> myObj = Nan::To<v8::Object>(dataarr).ToLocalChecked();
-    // v8::Local<v8::Value> value = myObj->Get(Nan::GetCurrentContext(), Nan::New("propertyName").ToLocalChecked()).ToLocalChecked();
 
-    // v8::Local <v8::Object> myObj = v8::Object::Cast(dataarr->Get(Nan::GetCurrentContext(), d).ToLocalChecked()); //ssasi
-    //v8::Local <v8::Object> myObj = v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d));
+    // Node 16 fix
+    v8::Local<v8::Value> el = dataarr->Get(context, d).ToLocalChecked();
+    v8::Local<v8::Object> myObj = v8::Local<v8::Object>::Cast(el);
+
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
     myNewSP->height = (unsigned int) myObj->GetInternalField(1)->NumberValue(Nan::GetCurrentContext()).FromJust();
     v8::Local <v8::Array> sparseArr = v8::Local<v8::Array>::Cast(myObj->GetInternalField(2));
@@ -189,13 +191,20 @@ void CompileVScroll(const Nan::FunctionCallbackInfo <v8::Value> &info) {
 
   Sparsearray **sparrs = new Sparsearray *[dataarr->Length()];
 
+  v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  v8::HandleScope handleScope(isolate);
+  v8::Local<v8::Context> context = isolate->GetCurrentContext();
+ 
   // Do the matrix!
   Sparsescroll matrix(width, height, yAxisMultiplier, debugMode, filter);
 
   for (unsigned int d = 0; d < dataarr->Length(); d++) {
     Sparsearray *myNewSP = new Sparsearray();
-    v8::Local <v8::Object> myObj = Nan::To<v8::Object>(dataarr).ToLocalChecked();
-    // v8::Local<v8::Object>::Cast(dataarr->Get(Nan::GetCurrentContext(), d)); // ssasi
+
+    // Node 16 fix
+    v8::Local<v8::Value> el = dataarr->Get(context, d).ToLocalChecked();
+    v8::Local<v8::Object> myObj = v8::Local<v8::Object>::Cast(el);
+
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
     myNewSP->height = (unsigned int) myObj->GetInternalField(1)->NumberValue(Nan::GetCurrentContext()).FromJust();
     v8::Local<v8::Array> sparseArr = v8::Local<v8::Array>::Cast(myObj->GetInternalField(2).As<v8::Array>());
