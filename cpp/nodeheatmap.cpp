@@ -82,9 +82,6 @@ void CompileCanvas(const Nan::FunctionCallbackInfo <v8::Value> &info) {
 
   Sparsearray **sparrs = new Sparsearray *[dataarr->Length()];
 
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::HandleScope handleScope(isolate);
-  v8::Local<v8::Context> context = isolate->GetCurrentContext();
   // Do the matrix!
   Sparsematrix matrix(width, height, blobwidth, blobheight, layout, blobVals, debugMode, filter, trimPixelsLeft, trimPixelsTop, trimPixelsRight, trimPixelsBottom);
 
@@ -92,7 +89,7 @@ void CompileCanvas(const Nan::FunctionCallbackInfo <v8::Value> &info) {
     Sparsearray *myNewSP = new Sparsearray();
 
     // Node 16 fix
-    v8::Local<v8::Value> el = dataarr->Get(context, d).ToLocalChecked();
+    v8::Local<v8::Value> el = dataarr->Get(Nan::GetCurrentContext(), d).ToLocalChecked();
     v8::Local<v8::Object> myObj = v8::Local<v8::Object>::Cast(el);
 
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
@@ -190,10 +187,6 @@ void CompileVScroll(const Nan::FunctionCallbackInfo <v8::Value> &info) {
   c->prepare();
 
   Sparsearray **sparrs = new Sparsearray *[dataarr->Length()];
-
-  v8::Isolate* isolate = v8::Isolate::GetCurrent();
-  v8::HandleScope handleScope(isolate);
-  v8::Local<v8::Context> context = isolate->GetCurrentContext();
  
   // Do the matrix!
   Sparsescroll matrix(width, height, yAxisMultiplier, debugMode, filter);
@@ -202,7 +195,7 @@ void CompileVScroll(const Nan::FunctionCallbackInfo <v8::Value> &info) {
     Sparsearray *myNewSP = new Sparsearray();
 
     // Node 16 fix
-    v8::Local<v8::Value> el = dataarr->Get(context, d).ToLocalChecked();
+    v8::Local<v8::Value> el = dataarr->Get(Nan::GetCurrentContext(), d).ToLocalChecked();
     v8::Local<v8::Object> myObj = v8::Local<v8::Object>::Cast(el);
 
     myNewSP->width = (unsigned int) myObj->GetInternalField(0)->NumberValue(Nan::GetCurrentContext()).FromJust();
