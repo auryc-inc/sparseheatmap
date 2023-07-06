@@ -18,7 +18,7 @@
   "homepage": "https://github.com/alexsaves/node-heatmap#readme",
   "dependencies": {
     "bindings": "^1.2.1",
-    "jimp": "^0.2.19",
+    "jimp": "^0.22.8",
     "nan": "^2.1.0"
   },
   "gypfile": true
